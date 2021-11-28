@@ -1,0 +1,26 @@
+[package]
+name = "exercism-rust"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+#[[bin]]
+#name = "vec"
+#path = "src/vec/bin/main.rs"
+
+#[[bin]]
+#name = "btreemap"
+#path = "src/btreemap/bin/main.rs"
+
+
+[workspace]
+members = [
+	"rpn-calculator-sol1",
+	"rpn-calculator-sol2"
+]
+
+[[bin]]
+name = "rpn-calculator-sol1"
+path = "rpn-calcuator-sol1/src/lib.rs"
+
