@@ -1,4 +1,3 @@
-
 #[derive(Debug)]
 pub enum CalculatorInput {
     Add,
@@ -8,40 +7,36 @@ pub enum CalculatorInput {
     Value(i32),
 }
 
-pub fn evaluate(inputs: &[CalculatorInput]) -> Option<i32> {
-    if inputs.len() == 0 {
-        return None;
-    }
-
-    let mut stack: Vec<i32> = Vec::new();
-    for input in inputs {
-        match input {
-            CalculatorInput::Value(number) => stack.push(*number),
-            _ => {
-                if stack.len() < 2 {
-                    return None;
-                }
-
-                let b = stack.pop().unwrap();
-                let a = stack.pop().unwrap();
-
-                match input {
-                    CalculatorInput::Add => stack.push(a + b),
-                    CalculatorInput::Multiply => stack.push(a * b),
-                    CalculatorInput::Subtract => stack.push(a - b),
-                    CalculatorInput::Divide => stack.push(a / b),
-                    _ => return None
-                }
-            }
-        }
-    }
-
-    if stack.len() != 1 {
-        return None;
-    }
-
-    return stack.pop()
-}
+  pub fn evaluate(inputs: &[CalculatorInput]) -> Option<i32> {
+      let mut stack: Vec<i32> = Vec::new();
+        for input in inputs {
+          let output = match input {
+              CalculatorInput::Add => {
+                  stack.pop().and_then(|right| stack.pop().map(|left| left + right))
+              },
+              CalculatorInput::Subtract => {
+                  stack.pop().and_then(|right| stack.pop().map(|left| left - right))
+              },
+              CalculatorInput::Multiply => {
+                  stack.pop().and_then(|right| stack.pop().map(|left| left * right))
+              },
+              CalculatorInput::Divide => {
+                  stack.pop().and_then(|right| stack.pop().map(|left| left / right))
+              },
+              CalculatorInput::Value(value) => {
+                  Some(*value)
+              }
+          };
+            if let Some(value) = output {
+              stack.push(value);
+          }
+      }
+        if stack.len() == 1 {
+          stack.pop()
+      } else {
+          None
+      }
+  }
 
 
 #[cfg(test)]
@@ -67,14 +62,14 @@ mod tests {
 		}
 
 		#[test]
-		//#[ignore]
+		// #[ignore]
 		fn test_simple_value() {
 				let input = calculator_input("10");
 				assert_eq!(evaluate(&input), Some(10));
 		}
 
 		#[test]
-		//#[ignore]
+		// #[ignore]
 		fn test_simple_addition() {
 				let input = calculator_input("2 2 +");
 				assert_eq!(evaluate(&input), Some(4));
@@ -104,9 +99,8 @@ mod tests {
 		#[test]
 		// #[ignore]
 		fn test_complex_operation() {
-				// let input = calculator_input("4 8 + 7 5 - /");
-				let input = calculator_input("5 1 2 + 4 * + 3 -");
-				assert_eq!(evaluate(&input), Some(14));
+				let input = calculator_input("4 8 + 7 5 - /");
+				assert_eq!(evaluate(&input), Some(6));
 		}
 
 		#[test]
@@ -124,4 +118,3 @@ mod tests {
 		}
 
 }
-

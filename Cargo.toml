@@ -17,7 +17,8 @@ edition = "2021"
 [workspace]
 members = [
 	"rpn-calculator-sol1",
-	"rpn-calculator-sol2"
+	"rpn-calculator-sol2",
+	"rpn-calculator-sol3"
 ]
 
 [[bin]]
